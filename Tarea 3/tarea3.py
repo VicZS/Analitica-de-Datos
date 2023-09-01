@@ -211,7 +211,9 @@ laptop_list=[
     Laptop(id=197, CPU = "Intel",RAM = "16GB",Almacenamiento = "1TB", Marca = "HP", SO = "Linux" ),
     Laptop(id=198, CPU = "Intel",RAM = "16GB",Almacenamiento = "256GB", Marca = "Asus", SO = "MacOS" ),
     Laptop(id=199, CPU = "Intel",RAM = "32GB",Almacenamiento = "512GB", Marca = "HP", SO = "MacOS" ),
-    Laptop(id=200, CPU = "AMD",RAM = "8GB",Almacenamiento = "256GB", Marca = "MSI", SO = "MacOS" ),]
+    Laptop(id=200, CPU = "AMD",RAM = "8GB",Almacenamiento = "256GB", Marca = "MSI", SO = "MacOS" ),
+    Laptop(id=201, CPU = "Intel",RAM = "32GB",Almacenamiento = "256GB", Marca = "Apple", SO = "MacOS" )
+    ]
 
 
 @app.get("/")
@@ -232,7 +234,7 @@ async def laptopclass(CPU:str, RAM:str):
     laptops=filter (lambda laptop: laptop.CPU == CPU, laptop_list)#Función de orden superior
     laptops1=filter (lambda laptop: laptop.RAM == RAM, laptops)#Función de orden superior
     try:
-        return list(laptops1)[0] #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
+        return list(laptops1) #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
     except:
         return{"error":"No se ha encontrado el usuario"}
     
@@ -242,7 +244,7 @@ async def laptopclass(CPU:str, RAM:str, Almacenamiento:str):
     laptops1=filter (lambda laptop: laptop.RAM == RAM, laptops)#Función de orden superior
     laptops2=filter (lambda laptop: laptop.Almacenamiento == Almacenamiento, laptops1)
     try:
-        return list(laptops2)[0] #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
+        return list(laptops2) #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
     except:
         return{"error":"No se ha encontrado el usuario"}
     
@@ -253,7 +255,7 @@ async def laptopclass(CPU:str, RAM:str, Almacenamiento:str, Marca:str):
     laptops2=filter (lambda laptop: laptop.Almacenamiento == Almacenamiento, laptops1)
     laptops3=filter (lambda laptop: laptop.Marca == Marca, laptops2)
     try:
-        return list(laptops3)[0] #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
+        return list(laptops3) #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
     except:
         return{"error":"No se ha encontrado el usuario"}
     
@@ -265,6 +267,6 @@ async def laptopclass(CPU:str, RAM:str, Almacenamiento:str, Marca:str, SO:str):
     laptops3=filter (lambda laptop: laptop.Marca == Marca, laptops2)
     laptops4=filter (lambda laptop: laptop.SO == SO, laptops3)
     try:
-        return list(laptops4)[0] #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
+        return list(laptops4) #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
     except:
         return{"error":"No se ha encontrado el usuario"}
