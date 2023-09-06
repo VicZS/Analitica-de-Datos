@@ -269,4 +269,4 @@ async def laptopclass(CPU:str, RAM:str, Almacenamiento:str, Marca:str, SO:str):
     try:
         return list(laptops4) #Nota se borra el [0] para que se muestren todas las computadoras que coincidan con los filtros
     except:
-        return{"error":"No se ha encontrado el usuario"}
+        return{"error":"No se ha encontrado la laptop"}
