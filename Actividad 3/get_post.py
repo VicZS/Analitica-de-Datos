@@ -1,0 +1,34 @@
+from fastapi import FastAPI 
+from pydantic import BaseModel
+app= FastAPI()
+
+class Pasajeros(BaseModel):
+    id: int
+    Name: str
+    Pclass: int
+    Survived: int
+    Sex: str
+    Age: int
+    SibSp: int
+    Parch: int
+    Ticket: str
+    Fare: str
+    Cabin: str
+    Embarked: str
+
+pasajeros_list=[]
+
+@app.get("/pasajeros/")
+async def pasajeros():
+    return (pasajeros_list)
+
+@app.post("/pasajeros/")
+async def pasajerosclass(pasajeros:Pasajeros):
+    found=False
+    
+    for index, saved_pasajero in enumerate(pasajeros_list):
+        if saved_pasajero.id == pasajeros.id:
+            return {"error":"el pasajero ya existe"}
+    else:
+        pasajeros_list.append(pasajeros)
+        return pasajeros
