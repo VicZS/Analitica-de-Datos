@@ -125,6 +125,15 @@ users_db ={
         "disabled": False,
         "password": "$2a$12$y6WJw8AD5QfZBoKAjq7FdOEPe2dWArGsjz5XZWy28PGpxRZHHYXm.",#5678
         "dni": "VICTOR"
+    },
+    "EDUARDO":{
+        "username":"EDUARDO",
+        "full_name": "José Eduardo Arrucha Álvarez ",
+        "email": "jose.arruchaal@alumno.buap.mx ",
+        "phone":2213317079,
+        "disabled": False,
+        "password": "$2a$12$y6WJw8AD5QfZBoKAjq7FdOEPe2dWArGsjz5XZWy28PGpxRZHHYXm.",#5678
+        "dni": "EDUARDO"
     }
 }
 
