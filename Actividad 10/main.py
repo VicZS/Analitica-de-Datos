@@ -40,17 +40,18 @@ async def mostrar():
 
 # Funcion agregar
 @app.post("/agregar/", status_code=status.HTTP_201_CREATED, response_description="Laptop agregado correctamente")
-async def agregar_laptop(laptop: Laptop):
+async def agregar(laptop: Laptop):
 
     # Verificar si ya existe un objeto con el mismo nombre
-    existing_laptop = collection.find_one({"Nombre": laptop.Nombre})
-    if existing_laptop:
+    validar_laptop = collection.find_one({"Nombre": laptop.Nombre})
+    if validar_laptop:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Ya existe una laptop con este nombre")
 
     nueva_laptop = {
         "Nombre": laptop.Nombre,
         "Marca": laptop.Marca
     }
+    #Agregar objeto a la coleccion
     resultado = collection.insert_one(nueva_laptop)
     return {"mensaje": "Laptop creada exitosamente", "id_creado": str(resultado.inserted_id)}
 
@@ -58,17 +59,17 @@ async def agregar_laptop(laptop: Laptop):
 #Funcion actualizar
 
 @app.put("/actualizar/{nombre}", status_code=status.HTTP_200_OK, response_description="Laptop actualizada correctamente")
-async def actualizar_laptop(nombre: str, laptop: Laptop):
-    resultado = collection.update_one({"Nombre": nombre}, {"$set": laptop.dict()})
-    if resultado.modified_count == 1:
+async def actualizar(nombre: str, laptop: Laptop):
+    actualizar_obj = collection.update_one({"Nombre": nombre}, {"$set": laptop.dict()})
+    if actualizar_obj.modified_count == 1:
         return {"mensaje": "Laptop actualizada correctamente"}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Laptop no encontrada")
 
 
 # Funcion Eliminar
 @app.delete("/eliminar/{nombre}", status_code=status.HTTP_200_OK, response_description="Laptop eliminada correctamente")
-async def eliminar_laptop(nombre: str):
-    resultado = collection.delete_one({"Nombre": nombre})
-    if resultado.deleted_count == 1:
+async def eliminar(nombre: str):
+    eliminar_obj = collection.delete_one({"Nombre": nombre})
+    if eliminar_obj.deleted_count == 1:
         return {"mensaje": "Laptop eliminada correctamente"}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Laptop no encontrada")
