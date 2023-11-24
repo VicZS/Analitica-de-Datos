@@ -10,7 +10,7 @@ import pymongo
 from bson import ObjectId
 
 from clienteA import cliente
-from models.users import User,UserM,UserM1
+from models.users import User,UserM,UserM1,UserA
 
 router = APIRouter()
 
@@ -111,3 +111,50 @@ async def eliminar(id: str):
 }
 
 '''
+
+
+def search_user_db(username: str):
+    users_db = list(collection.find({"username": username}))
+    if any(user["username"] == username for user in users_db):
+        return UserA(**users_db[0])
+
+
+def search_user(username:str):
+    users_db = collection.find({"username": username})
+    if username in users_db:
+        return UserA(**users_db[username])
+    
+async def auth_user(token: str = Depends(oauth2)):
+    try:
+        username = jwt.decode(token, SECRET, algorithms=[ALGORITHM]).get("sub")
+        if username is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales de autenticación inválidas")
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales de autenticación inválidas")
+
+    return search_user_db(username)
+
+async def current_user(user_db: UserA = Depends(auth_user)):
+    if user_db.disabled:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Usuario inactivo")
+    return user_db
+
+
+@router.post("/login/")
+async def login(form: OAuth2PasswordRequestForm = Depends()):
+    user_db = search_user_db(form.username)
+    if not user_db:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El usuario no es correcto")
+    
+    if not crypt.verify(form.password, user_db.password):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="La contraseña no es correcta")
+    
+    access_token_expiration = timedelta(minutes=ACCESS_TOKEN_DURATION)
+    expire = datetime.utcnow() + access_token_expiration
+    access_token = {"sub": user_db.username, "exp": expire}
+    return {"access_token": jwt.encode(access_token, SECRET, algorithm=ALGORITHM), "token_type": "bearer"}
+
+@router.get("/users/me/")
+async def me(user_db:UserA= Depends (current_user)):
+    imagen = f"static/{user_db.username}.png"
+    return FileResponse (imagen)
