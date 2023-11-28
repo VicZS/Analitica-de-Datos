@@ -1,4 +1,3 @@
-
 #Importamos el framework fastapi a nuestro entorno de trabajo
 from fastapi import FastAPI 
 #Importamos de la carpeta: "routers" el código o las clases: "routers_5" y "routers2_5"
